@@ -12,8 +12,6 @@ add_executable(test018    fig1.8strerror_errno_perror.c)
 add_executable(test019    fig1.9_getuid_getgid.c)
 add_executable(test0110   fig1.10_singal.c)
 
-
-add_executable(current_debug   fig1.10_singal.c)
 # 添加测试的一种方式
 add_test(test013  16)
 add_test(test014  17)
