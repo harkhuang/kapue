@@ -19,7 +19,7 @@ main(void)
 		} else if (pid == 0) {		/* child */
 			execlp(buf, buf, (char *)0);
 			err_ret("couldn't execute: %s", buf);
-			exit(127); // 127自定义的一个返回值
+			exit(127); // 127自定义的一个返回值？
 		}
 		
 		

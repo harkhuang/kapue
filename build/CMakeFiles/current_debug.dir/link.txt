@@ -1,1 +1,0 @@
-/usr/bin/clang -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/current_debug.dir/fig1.7.c.o  -o current_debug 

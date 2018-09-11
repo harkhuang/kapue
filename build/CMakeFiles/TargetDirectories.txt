@@ -1,6 +1,0 @@
-/Users/hk/Documents/github/kapue/build/CMakeFiles/rebuild_cache.dir
-/Users/hk/Documents/github/kapue/build/CMakeFiles/test.dir
-/Users/hk/Documents/github/kapue/build/CMakeFiles/current_debug.dir
-/Users/hk/Documents/github/kapue/build/CMakeFiles/edit_cache.dir
-/Users/hk/Documents/github/kapue/build/CMakeFiles/test17.dir
-/Users/hk/Documents/github/kapue/build/CMakeFiles/test16.dir
