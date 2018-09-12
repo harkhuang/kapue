@@ -66,7 +66,7 @@ lfstat()
 
 
 
-#第四章
+#第四章  stat 获取文件信息  getcwd获取工作路径  chdir 更改工作路径   path_alloc可移植的获取文件名称长度
 
 
 

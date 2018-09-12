@@ -33,6 +33,10 @@ static int pathmax = 0;
 #endif 
 
 
+
+
+// 根据不同版本号的系统  动态申请文件名字的长度
+
 char *path_alloc(int *sizep)
 {
     char    *ptr;
@@ -66,6 +70,8 @@ char *path_alloc(int *sizep)
 }
 
 
+
+// 一个测试函数
 static int myftw(char * pathname, Myfunc *func)
 {
     int len;
@@ -99,9 +105,12 @@ static int dopath(Myfunc* func)
     *ptr++ = '/';
     *ptr = 0;
 
-    while((dirp = opendir(fullpath)) != NULL){
-        if(strcmp(dirp->d_name, '.') == 0||
-           strcmp(dirp->d_name, '..') == 0)
+    if((dp = opendir(fullpath)) == NULL)
+        return(func(fullpath, &statbuf, FTW_DNR));
+
+    while((dirp = readdir(dp)) != NULL){
+        if(strcmp(dirp->d_name, ".") == 0||
+           strcmp(dirp->d_name, "..") == 0)
            continue;
 
         strcpy(ptr, dirp->d_name);
@@ -118,9 +127,12 @@ static int dopath(Myfunc* func)
 }
 
 
+
+// 自定义的调用   根据文件名称   获取文件信息  这里做的只是统计总共的文件数量 无它
 static int myfunc(const char *pathname, const struct stat *statptr, int type)
 {
     switch(type){
+    // 统计除了目录之外的文件信息    
     case FTW_F:
         switch (statptr->st_mode & S_IFMT){
         case S_IFREG: nreg++;       break;
@@ -132,12 +144,15 @@ static int myfunc(const char *pathname, const struct stat *statptr, int type)
         case S_IFDIR: ndir++;       break;
             err_dump("for S_IFDIR for %s", pathname);
         }
+    // 统计目录数量
     case FTW_D:
         ndir++;
         break;
+    // 报错1    
     case FTW_DNR:
         err_ret("cant read dirctory %s", pathname);
         break;
+    // 报错2
     case FTW_NS:
         err_ret("stat error for %s", pathname);
     
@@ -151,16 +166,21 @@ static int myfunc(const char *pathname, const struct stat *statptr, int type)
 
 
 
+
+// 递归统计文件 总的信息
 int
 main(int argc, char *argv[])
 {
 	int		ret;
 
+#if 0 
 	if (argc != 2)
 		err_quit("usage:  ftw  <starting-pathname>");
 
 	ret = myftw(argv[1], myfunc);		/* does it all */
-
+#else
+    ret = myftw("..", myfunc);
+#endif
 	ntot = nreg + ndir + nblk + nchr + nfifo + nsdlink + nsock;
 	if (ntot == 0)
 		ntot = 1;		/* avoid divide by 0; print 0 for all counts */
