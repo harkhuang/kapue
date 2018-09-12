@@ -1,7 +1,8 @@
 {
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "files.associations": {
-        "apue.h": "c"
+        "apue.h": "c",
+        "errno.h": "c"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

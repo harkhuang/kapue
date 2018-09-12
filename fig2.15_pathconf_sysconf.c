@@ -15,8 +15,6 @@ static long	posix_version = 0;
 /*
 pathconf（）  和  sysconf（）获取和调整系统参数
 
-
-
 */
 
 
