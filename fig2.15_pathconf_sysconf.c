@@ -12,6 +12,14 @@ static int	pathmax = 0;
 
 static long	posix_version = 0;
 
+/*
+pathconf（）  和  sysconf（）获取和调整系统参数
+
+
+
+*/
+
+
 /* If PATH_MAX is indeterminate, no guarantee this is adequate */
 #define	PATH_MAX_GUESS	1024
 

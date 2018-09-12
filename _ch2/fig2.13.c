@@ -5,6 +5,8 @@
 static void	pr_sysconf(char *, int);
 static void	pr_pathconf(char *, char *, int);
 
+
+// 理解一些宏定义 关于linux的  涉及到进程控制的最大参数
 int
 main(int argc, char *argv[])
 {
