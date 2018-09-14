@@ -67,9 +67,11 @@ lfstat()
 
 
 #第四章  stat 获取文件信息  getcwd获取工作路径  chdir 更改工作路径   path_alloc可移植的获取文件名称长度
-
-
-
+这章节不仅仅讲的文件获取方式，
+前面更多的是讲内核文件是如何组织的，思考操作系统中的  逻辑地址->线性地址->物理地址
+在思考文件inode  vnode  block
+ [ ]  构建内核架构图  最好形成知识的回路  融会贯通太重要了
+ [ ] 
 
 add_executable(test0110   fig1.10_singal.c)
 
@@ -77,6 +79,21 @@ add_executable(test0110   fig1.10_singal.c)
 
 add_executable(current_debug   fig1.10_singal.c)
 
+
+
+#第五章 标准io库
+
+印象中这章节主要讲的就是io的缓冲  半缓冲  全缓冲  行缓冲
+基于内核的实现不同  采取的不同的交互接口实现方式  这个对我理解内核中io有很大益处
+一切的io操作都是围绕着stream流进行的
+标准io库和内核io库的区别和练习？
+行缓冲大小和全缓冲大小在传输效率上的区别？
+
+用到的函数列表
+```
+int fwide()   //
+
+```
 
 # 添加测试的一种方式
 add_test(test013  16)

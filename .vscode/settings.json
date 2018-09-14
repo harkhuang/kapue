@@ -2,7 +2,9 @@
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "files.associations": {
         "apue.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "calld.h": "c",
+        "stdio.h": "c"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }
