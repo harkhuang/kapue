@@ -4,7 +4,8 @@
         "apue.h": "c",
         "errno.h": "c",
         "calld.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "wait.h": "c"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

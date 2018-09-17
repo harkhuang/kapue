@@ -3,6 +3,8 @@
 int		glob = 6;		/* external variable in initialized data */
 char	buf[] = "a write to stdout\n";
 
+
+// fork 前面后面的代码都是共享写复制的
 int
 main(void)
 {
