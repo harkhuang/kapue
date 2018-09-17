@@ -1,0 +1,3 @@
+before vfork
+i am father
+pid = 7221, glob = 7, var = 89
