@@ -8,6 +8,7 @@ main(void)
 {
 	pid_t	pid;
 
+	// pid 是子进程的id号码
 	if ((pid = fork()) < 0) {
 		err_sys("fork error");
 	} else if (pid == 0) {	/* specify pathname, specify environment */
@@ -17,6 +18,7 @@ main(void)
 	}
 
 	// 等待某个进程  后面应该怎么做
+	// 为同步而阻塞
 	if (waitpid(pid, NULL, 0) < 0)
 		err_sys("wait error");
 
