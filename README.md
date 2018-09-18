@@ -1,146 +1,268 @@
-[toc]
 
-# learn apue
-## 第一章内容 perror（）  主要操作系统上的环境变量  获取和调整
-add_executable(test013    fig1.3_opendir_struct_dirent.c)
-add_executable(test014    fig1.4test_read_write.c)
-add_executable(test015    fig1.5getc_putc.c)
-add_executable(test016    fig1.6getpid_getppid.c)
-add_executable(test017    fig1.7fork_execlp_waitpid.c)
-add_executable(test018    fig1.8strerror_errno_perror.c)
-add_executable(test019    fig1.9_getuid_getgid.c)
-add_executable(test0110   fig1.10_singal.c)
-
-## 第二章  sysconf() 基于不同操作系统提供的一些系统环境变量的修改
-add_executable(test02150   fig2.15_pathconf_sysconf.c)
-add_executable(test02160   fig2.16_sysconf_limits.c)
+APUE读书笔记
+============================
 
 
-## 第三章  read write 系统io缓冲  其实并没有  
+第十章
+--------------------------------------------------
+ 
+ToDoList
 
+- [x] sleep初级实现  2017年12月6日 10:41:30
+- [ ] sleep进阶实现
+
+- [ ] sleep高阶实现
+- [ ] `最佳实践`  内核sleep实现 
+
+
+
+- [ ] sigspending  2017年12月15日 17:32:53
+
+- [ ] 利用掩码属性如何重写sleep实现函数
+
+- [ ]  读完了信号的大概  需要复习 和整理
+
+- [ ] 添加了cmakelist文件2017年12月26日 14:27:35
+
+| 项目         |  时间  | 文档版本|作者|备注|
+| --------    | :----:  |:------:|:----|:---|
+|  读书笔记 |      2017/12/06    |初稿|shiyanhk@gmail.com|sleep初级实现|
+
+[TOC]
+
+- - -
+### 1 编写目的
+
+- 之前对singnal信号理解一知半解,就这篇文章想通过我的描述来把signal这一章节,深入浅出的讲解出来.
+- 不妨我们就从apue书中具体用例展开我们需要的描述,虽然片面,后续仍会有修改和添加.
+
+### 内容计划
+
+
+### 2 循序渐进的实现
+> sleep函数基于信号实现,循序渐进的几个用例,这里会层层深入,发现和修正我们认知路上的错误,而且附上了代码.
+ 
+#### 2.1 `sleep`  初级实现
+
+##### 2.1.1 `code`
 ```
-这里主要介绍了fcntl函数对我们的访问权限 用户组做了一个控制
-同时介绍量我们的函数可以做一些线程相关控制的同步 和异步操作
-
-同时介绍了空洞文件非常nice的多线程等控制
-
-同时关于文件操作读写所控制，本身文件io就有的一些基础的属性，内核已经提供给我们了
-当我们用到的时候肯定可以发挥更大的功能和作用啊～
-
-```
-
-
-
-
-# 第四章  主要讲文件和目录
-通过文件描述符  获取文件相关属性
-属性分基础属性，文件符号和链接
-高级属性探索ing
-
-//根据文件路径获取
-stat()
-//根据文件描述符获取
-fstat()
-//根据路径返回和链接符有关的信息
-lfstat()
-
-这是文件结构描述
-```
- struct stat {
-       mode_t    st_mode;      /* file type & mode (permissions) */ //访问权限
-       ino_t     st_ino;       /* i-node number (serial number) */ // i节点信息 逻辑地址信息
-       dev_t     st_dev;       /* device number (file system) */ // 物理设备数量
-       dev_t     st_rdev;      /* device number for special files */ //只有字符特殊设备和块特殊设备才会有st_rdev值。此值包含实际设备的设备号。
-       nlink_t   st_nlink;     /* number of links */ // 链接的个数？
-       uid_t     st_uid;       /* user ID of owner */
-       gid_t     st_gid;       /* group ID of owner */
-       off_t     st_size;      /* size in bytes, for regular files */
-       time_t    st_atime;     /* time of last access */ //访问实践
-       time_t    st_mtime;     /* time of last modification */
-       time_t    st_ctime;     /* time of last file status change */
-       blksize_t st_blksize;   /* best I/O block size */
-       blkcnt_t  st_blocks;    /* number of disk blocks allocated */
-     };
-
+#include	<signal.h>
+#include	<unistd.h>
+static void sig_alrm(int signo){
+	/* nothing to do, just return to wake up the pause */
+}
+unsigned int sleep1(unsigned int nsecs){
+	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
+		return(nsecs);
+	alarm(nsecs);		/* start the timer */
+	pause();			/* next caught signal wakes us up */
+	return(alarm(0));	/* turn off timer, return unslept time */
+}
 ```
 
+##### 2.1.2 代码问题分析
+ - 1.如果调用者已设置了闹钟，则它被`sleep1`函数中的第一次`alarm`调用擦去。
+ - 2.该程序中修改了对`SIGALRM`的配置。 
+ - 3.在调用 `alarm`和`pause`之间有一个竞态条件。 
 
 
-#第四章  stat 获取文件信息  getcwd获取工作路径  chdir 更改工作路径   path_alloc可移植的获取文件名称长度
-这章节不仅仅讲的文件获取方式，
-前面更多的是讲内核文件是如何组织的，思考操作系统中的  逻辑地址->线性地址->物理地址
-在思考文件inode  vnode  block
- [ ]  构建内核架构图  最好形成知识的回路  融会贯通太重要了
- [ ] 
-
-add_executable(test0110   fig1.10_singal.c)
-
-
-
-add_executable(current_debug   fig1.10_singal.c)
+> **简单总结**
+1. 旧信号处理函数
+2. 旧信号状态
+3. 信号既然修改,考虑竞争对信号的影响
+#####  2.1.3 解决方案
+ - 1.利用alarm返回值确定上次信号状态 
+ - 2.利用signal返回值确定signal函数原始回调操作 
+ - 3.利用setjmp和longjmp修改 
 
 
+##### 2.1.4 `详细分析`
 
-#第五章 标准io库
+- 问题1 **利用alarm返回值记录 剩余时钟**
+  - 办法 
+  >  可用下列方法更正这一点：检查第一次调用alarm的返回值，如其小于本次调用 alarm的参数值，则只应等到该前次设置的闹钟时间超时。如果前次设置闹钟时间的超时时刻后于本次设置值，则在sleep1函数返回之前，再次设置闹钟时间，使其在预定时间再发生超时。
 
-印象中这章节主要讲的就是io的缓冲  半缓冲  全缓冲  行缓冲
-基于内核的实现不同  采取的不同的交互接口实现方式  这个对我理解内核中io有很大益处
-一切的io操作都是围绕着stream流进行的
-标准io库和内核io库的区别和练习？
-行缓冲大小和全缓冲大小在传输效率上的区别？
-
-用到的函数列表
+  - 代码 
 ```
-int fwide()   //
-
+//todo
 ```
 
-#第六章 系统数据 
-获取进程环境相关数据
-包括用户  用户组  密码等
+- 问题2 **该程序中修改了对SIGALRM的配置。**
+> 在一个繁忙的系统中，可能 a l a r m在调用  p a u s e之前超时，并调用了信号处理程序。如果发生了这种情况，则在调用 p a u s e后，如果没有  捕捉到其他信号，则调用者将永远被挂起.
+
+  - 办法 
+> 没有对原信号处理程序做保存   修改信号掩码  对未决信号 做特殊处理 
+可用下列方法更正这一点：检查第一次调用 alarm的返回值，如其小于本次调用 alarm的参数值，则只应等到该前次设置的闹钟时间超时。如果前次设置闹钟时间的超时时刻后于本次设置值，则在sleep1函数返回之前，再次设置闹钟时间，使其在预定时间再发生超时。
+
+  - 代码 
+** 代码实现**
+```
+//todo
+```
+
+- 问题3 **在调用 alarm和pause之间有一个竞态条件。 **
+ > 在一个繁忙的系统中，可能 a l a r m在调用  p a u s e之前超时，并调用了信号处理程序。如果发生了这种情况，则在调用 p a u s e后，如果没有  捕捉到其他信号，则调用者将永远被挂起
+
+  - 办法
+** 利用setjmp和longjmp函数切换上下文**
+> SVR2中的sleep实现使用了setjmp和longjmp (见7 . 1 0节)以避免问题( 3 )中所说明的竞态条件。此函数的一个简化版本，称为 s l e e p 2，示于程序 1 0 - 5中（为了缩短实例长度，程序中没有处理上面所说的问题( 1 )和( 2 )
 
 
 
-#第七章 进程环境
-###main函数
-内核使用exec函数创建 启动例程
-###进程终止
-终止（termination）的几种方式
-从main函数返回
-调用exit
-调用_exit活着_Exit
-最后一个线程从启动例程返回
-最后一个线程调用pthread_ext
+**问题 3代码实现**
 
-异常终止的三种方式
-调用abort
-接到一个信号并终止
-最后一个线程对取消请求做出响应
-###命令行参数
-###环境表
-###c程序的存储结构
-###共享库??????
-###存储器分配
-###环境变量  
-环境变量和环境表的区别？
-###setjmp  和 longsetmp 区别？
-###getrlimit 和  setrlimit？？
-###小结  嗯～～～ 奈斯
+```
+代码略(这部分比较复杂,我们放到下一章节单独来讲)
+```
 
 
 
-# 第八章 进程控制哦  相关的全部内容
+#### 2.2 sleep进阶实现
 
-先思考几个问题
-1.父子进程如何得到对方的状态？
-2.得到什么样的状态，得到状态后应该怎么做？
-3.mutex用于线程这是一个不可用的模型，在进程控制中不可用，那么其他的socket 还有fifo？用于通信吗？
-4.信号+pid是否能控制进程？
-5.手动表情 [一脸茫然]😃
+##### 2.2.1代码
 
-这章内容主要就是解释  
-竞争状态  
-控制竞争的方式 
-实现的原理 
 
-我想理解这些进程控制差不多就够了
+```
+#include	<setjmp.h>
+#include	<signal.h>
+#include	<unistd.h>
+static jmp_buf	env_alrm;
+static void sig_alrm(int signo){
+	longjmp(env_alrm, 1);
+}
+
+unsigned int sleep2(unsigned int nsecs){
+	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
+		return(nsecs);
+	if (setjmp(env_alrm) == 0) {
+		alarm(nsecs);		/* start the timer */
+		pause();			/* next caught signal wakes us up */
+	}
+	return(alarm(0));		/* turn off timer, return unslept time */
+}
+
+```
+
+##### 2.2.2问题
+> 1.**xxxxxxxx**
+> 2.**xxxxxxxx**
+
+#####  2.2.3解决办法
+> 1.**xxxxxxxx**
+> 2.**xxxxxxxx**
+
+
+##### 2.2.4详细分析
+
+>  **问题 1**  ++利用alarm返回值记录 剩余时钟 ++
+   
+  > 可用下列方法更正这一点：检查第一次调用alarm的返回值，如其小于本次调用 alarm的参数值，则只应等到该前次设置的闹钟时间超时。如果前次设置闹钟时间的超时时刻后于本次设置值，则在sleep1函数返回之前，再次设置闹钟时间，使其在预定时间再发生超时。
+
+
+#### 2.3  一个信号函数的高阶实现
+
+
+
+
+##### code
+```
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+#include <time.h>
+
+static void						sig_usr1(int), sig_alrm(int);
+static sigjmp_buf				jmpbuf;
+static volatile sig_atomic_t	canjump;
+
+
+
+// 信号集探测函数
+void
+pr_mask(const char *str)
+{
+	sigset_t	sigset;//  保存信号掩码的结构体
+	int			errno_save; // 
+
+	errno_save = errno;		/* we can be called by signal handlers */
+	if (sigprocmask(0, NULL, &sigset) < 0)  // 掩码的容错处理
+		printf("sigprocmask error");
+
+	printf("%s", str);
+
+	// 探测信号集中是否包含此函数
+	if (sigismember(&sigset, SIGINT))   printf("SIGINT ");
+	if (sigismember(&sigset, SIGQUIT))  printf("SIGQUIT ");
+	if (sigismember(&sigset, SIGUSR1))  printf("SIGUSR1 ");
+	if (sigismember(&sigset, SIGALRM))  printf("SIGALRM ");
+
+	/* remaining signals can go here  */
+
+	printf("\n");
+	errno = errno_save;
+}
+
+static void
+sig_usr1(int signo)
+{
+	time_t	starttime;
+
+	if (canjump == 0)
+		return;		/* unexpected signal, ignore */
+
+	pr_mask("starting sig_usr1: ");
+	alarm(3);				/* SIGALRM in 3 seconds */
+	starttime = time(NULL);
+	for ( ; ; )				/* busy wait for 5 seconds */
+		if (time(NULL) > starttime + 5)
+			break;
+	pr_mask("finishing sig_usr1: ");
+
+	canjump = 0;
+	siglongjmp(jmpbuf, 1);	/* jump back to main, don't return */
+}
+
+
+
+static void
+sig_alrm(int signo)
+{
+	pr_mask("in sig_alrm: ");
+}
+
+
+
+int
+main(void)
+{
+	if (signal(SIGUSR1, sig_usr1) == SIG_ERR)
+		err_sys("signal(SIGUSR1) error");
+	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
+		err_sys("signal(SIGALRM) error");
+	pr_mask("starting main: ");		/* {Prog prmask} */
+
+	if (sigsetjmp(jmpbuf, 1)) {
+		pr_mask("ending main: ");
+		exit(0);
+	}
+	canjump = 1;	/* now sigsetjmp() is OK */
+
+	for ( ; ; )
+		pause();
+}
+
+```
+
+
+
+##### 总结
+
+ > 使用大量信号功能。
+ > 进程阻塞SIGUSR1信号  保存当前信号屏蔽字
+ >
+
+
+
+ 

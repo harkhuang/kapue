@@ -9,8 +9,8 @@ main(void)
 
 	// tell wait do what ?
 	// how to fix the sync after fork?
-	
-	TELL_WAIT();
+
+	TELL_WAIT();//设置新的信号掩码 user1  user2信号
 
 	if ((pid = fork()) < 0) {
 		err_sys("fork error");
@@ -19,6 +19,7 @@ main(void)
 		charatatime("output from child\n");
 	} else {
 		charatatime("output from parent\n");
+		// 向子进程发送user1信号
 		TELL_CHILD(pid);
 	}
 	exit(0);
