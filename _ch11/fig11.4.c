@@ -5,6 +5,9 @@ struct foo {
 	int a, b, c, d;
 };
 
+
+// 思考:在线程之间参数传递应该如何控制?
+// 参数传递  线程结束后资源会自动释放吗
 void
 printfoo(const char *s, const struct foo *fp)
 {
@@ -49,7 +52,9 @@ main(void)
 	printf("parent starting second thread\n");
 	err = pthread_create(&tid2, NULL, thr_fn2, NULL);
 	if (err != 0)
-		err_quit("can't create thread 2: %s\n", strerror(err));
+		err_quit("can't 0[
+
+		] thread 2: %s\n", strerror(err));
 	sleep(1);
 	printfoo("parent:\n", fp);
 	exit(0);
