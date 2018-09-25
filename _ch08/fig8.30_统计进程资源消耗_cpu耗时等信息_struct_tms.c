@@ -1,6 +1,7 @@
 #include "apue.h"
 #include <sys/times.h>
 
+// 通过函数宏获取  系统属性  还可以获取该函数是否是线程安全的
 static void	pr_times(clock_t, struct tms *, struct tms *);
 static void	do_cmd(char *);
 void

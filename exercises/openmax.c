@@ -10,6 +10,7 @@ open_max(void)
 	long openmax;
 	struct rlimit rl;
 
+	// 通过这个函数可以判读啊
 	if ((openmax = sysconf(_SC_OPEN_MAX)) < 0 ||
 	  openmax == LONG_MAX) {
 		if (getrlimit(RLIMIT_NOFILE, &rl) < 0)
