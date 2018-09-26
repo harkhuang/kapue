@@ -9,6 +9,8 @@ pthread_mutex_t env_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 extern char **environ;
 
+
+// pthread_once 创建线程唯一资源属性
 static void
 thread_init(void)
 {
