@@ -2,7 +2,7 @@
 #include <sys/wait.h>
 
 // wait 来处理多进程通信
-
+// fork 得到的pid是父进程的pid 
 void
 pr_exit(int status)
 {

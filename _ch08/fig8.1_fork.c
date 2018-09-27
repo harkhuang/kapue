@@ -3,6 +3,7 @@
 int		glob = 6;		/* external variable in initialized data */
 char	buf[] = "a write to stdout\n";
 
+// 这里我们可以检测  创建进程后的共享代码到底是否继续共享?
 int
 main(void)
 {

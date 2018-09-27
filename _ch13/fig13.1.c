@@ -28,11 +28,12 @@ daemonize(const char *cmd)
 	/*
 	 * Become a session leader to lose controlling TTY.
 	 */
+	 // 创建子进程
 	if ((pid = fork()) < 0)
 		err_quit("%s: can't fork", cmd);
 	else if (pid != 0) /* parent */
 		exit(0);
-	setsid();
+	setsid();// 设置会话id做什么?
 
 	/*
 	 * Ensure future opens won't allocate controlling TTYs.
