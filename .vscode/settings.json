@@ -6,7 +6,8 @@
         "calld.h": "c",
         "stdio.h": "c",
         "wait.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "fcntl.h": "c"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }
